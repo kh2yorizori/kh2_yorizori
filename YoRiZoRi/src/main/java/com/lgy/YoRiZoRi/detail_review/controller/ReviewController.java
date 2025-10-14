@@ -1,4 +1,4 @@
-package com.lgy.YoRiZoRi.detail_comment.controller;
+package com.lgy.YoRiZoRi.detail_review.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,22 +9,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO;
-import com.lgy.YoRiZoRi.detail_comment.service.CommentService;
+import com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO;
+import com.lgy.YoRiZoRi.detail_review.service.ReviewService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class CommentController {
+public class ReviewController {
 	@Autowired(required = false)
-	private CommentService service;
+	private ReviewService service;
 	
 	@RequestMapping("/list")
-	public ArrayList<CommentDTO> list(Model model) {
+	public ArrayList<ReviewDTO> list(Model model) {
 		log.info("@# list()");
 		
-		ArrayList<CommentDTO> list = service.list();
+		ArrayList<ReviewDTO> list = service.list();
 		model.addAttribute("list", list);
 		return list;
 	}
@@ -39,10 +39,10 @@ public class CommentController {
 		return "redirect:list";
 	}
 	
-	@RequestMapping("/comment_view")
-	public String comment_view() {
-		log.info("@# comment_view()");
+	@RequestMapping("/review_view")
+	public String review_view() {
+		log.info("@# review_view()");
 		
-		return "comment_view";
+		return "review_view";
 	}
 }
