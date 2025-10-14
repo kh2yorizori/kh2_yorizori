@@ -23,15 +23,21 @@
 	
 	<context:component-scan base-package="com.lgy.YoRiZoRi" />
 	
+<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></beans:property>
+		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></beans:property>
+		<beans:property name="username" value="scott"></beans:property>
+		<beans:property name="password" value="tiger"></beans:property>
+	</beans:bean>
+	
 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource"></beans:property>
 		<!-- 		sql 로 구성된 xml 경로 설정 -->
-		<beans:property name="mapperLocations" value="classpath:com/lgy/item_mybatis_oracle/dao/mapper/*.xml"></beans:property>
+		<beans:property name="mapperLocations" value="classpath:com/lgy/YoRiZoRi/*/dao/mapper/*.xml"></beans:property>
 	</beans:bean>
 	
 	<!-- 	SqlSessionTemplate 타입의 sqlSession 객체는 sqlSessionFactory 객체를 포함한다. -->
 	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<beans:constructor-arg index="0" ref="sqlSessionFactory"></beans:constructor-arg>
 	</beans:bean>
-	
 </beans:beans>
