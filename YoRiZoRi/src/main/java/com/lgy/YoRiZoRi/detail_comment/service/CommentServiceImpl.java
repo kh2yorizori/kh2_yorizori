@@ -30,4 +30,12 @@ public class CommentServiceImpl implements CommentService {
 		dao.write(dto);
 	}
 
+	@Override
+	public String getWroteTime(CommentDTO dto) {
+		CommentDAO dao = sqlSession.getMapper(CommentDAO.class);
+
+		String time = dao.getWroteTime(dto);
+		return time;
+	}
+
 }

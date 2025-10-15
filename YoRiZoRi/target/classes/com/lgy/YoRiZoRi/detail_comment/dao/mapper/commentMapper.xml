@@ -12,5 +12,8 @@
 		 recipe_id, member_id, content) values
 		 (3, 0, 0, 1, #{member_id}, #{content})
 	</insert>
+	<select id="getWroteTime">
+		select created_at from comment_tb where comment_id=#{comment_id};
+	</select>
 
 </mapper>

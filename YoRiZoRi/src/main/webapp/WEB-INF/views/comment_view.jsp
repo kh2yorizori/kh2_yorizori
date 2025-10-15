@@ -8,7 +8,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript">
 		function fn_submit(){
-			console.log("@@jsjs");
+			console.log("@@@ fn_submit()");
 			
 			var cmtContent = $("#content").val();
 			
@@ -30,15 +30,31 @@
 			$.ajax({
 				type:"post"
 				,data:formData
-// 				,dataType:"json"
 				,url:"write"
 				,success: function(data) {
 					alert("저장완료");	
 					document.getElementById("result").innerHTML = "<div>" + data + "</div>";
+					fn_getWroteTime();
 				}
 				,error: function(error) {
 					alert("오류발생" + error);	
 					document.getElementById("result").innerHTML = "<h3>ajax fail</h3>";
+				}
+			});
+		};
+		
+		function fn_getWroteTime(){
+			console.log("@@@ fn_getWroteTime()");
+			$.ajax({
+				type:"post"
+				,data:formData
+				,url:"getWroteTime"
+				,success : function(data){
+					alert("저장완료");	
+					document.getElementById("timeResult").innerHTML = "<div>" + data + "</div>";
+				}
+			,error : function(error){
+				alert("오류발생" + error);	
 				}
 			});
 		};
@@ -49,10 +65,14 @@
         <h2 >댓글 목록</h2>
         <div id="comment-list">
         </div>
+        <div><p id="wroteTime"></p></div>
         
         <!-- AJAX 테스트 결과 영역 -->
         <p id="result" >
             여기는 서버 통신 (AJAX) 결과가 표시되는 영역입니다.
+        </p>
+        <p id="timeResult">
+        	작성일자가 표시되는 영역입니다.
         </p>
         
         
