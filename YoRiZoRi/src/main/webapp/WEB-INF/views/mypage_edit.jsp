@@ -10,7 +10,9 @@
 </head>
 <body>
 <h2>마이페이지 수정</h2>
-
+<!--    <p> -->
+<%--   <img src="/images/${user.profile_image}" alt="프로필 이미지" style="width:150px; height:150px; cursor:pointer;" id="profileImg" /> --%>
+<!-- </p> -->
 <form action="modify" method="post">
     <input type="hidden" name="member_Id" value="${user.member_Id}" />
 	

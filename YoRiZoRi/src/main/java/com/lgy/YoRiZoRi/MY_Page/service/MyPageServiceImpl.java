@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lgy.YoRiZoRi.MY_Page.dao.MyPageDAO;
 import com.lgy.YoRiZoRi.MY_Page.dto.MyPageDTO;
+import com.lgy.YoRiZoRi.MY_Page.dto.MyRecipeDTO;
 
 
 
@@ -46,6 +47,12 @@ public class MyPageServiceImpl implements MyPageService {
 	public MyPageDTO getUserById(String memberId) {
 	    MyPageDAO dao = sqlSession.getMapper(MyPageDAO.class);
 	    return dao.getUserById(memberId);
+	}
+
+	@Override
+	public List<MyRecipeDTO> getById(String memberId) {
+		MyPageDAO dao = sqlSession.getMapper(MyPageDAO.class);
+		    return dao.getById(memberId);
 	}
 
 }

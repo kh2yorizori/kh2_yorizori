@@ -14,6 +14,6 @@ SELECT * FROM member_tb WHERE MEMBER_ID = #{MEMBER_ID} AND password = #{PASSWORD
 <insert id="write" parameterType="java.util.HashMap"> 
 INSERT INTO member_tb ( member_id, name, password, nickname, email, profile_image, phone_number, birthdate, gender )	
  VALUES 
- ( #{MEMBER_ID}, #{NAME}, #{PASSWORD}, #{NICKNAME}, #{EMAIL}, #{profile_image}, #{PHONE_NUMBER}, TO_DATE(#{BIRTHDATE}, 'YYYY-MM-DD'), #{GENDER} ) 
+ ( #{MEMBER_ID}, #{NAME}, #{PASSWORD}, #{NICKNAME}, #{EMAIL}, #{PROFILE_IMAGE}, #{PHONE_NUMBER}, TO_DATE(#{BIRTHDATE}, 'YYYY-MM-DD'), #{GENDER} ) 
 </insert>
 </mapper>

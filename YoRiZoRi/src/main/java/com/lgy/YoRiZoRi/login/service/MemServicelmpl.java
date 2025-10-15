@@ -36,7 +36,6 @@ public class MemServicelmpl implements MemService{
 	    public void write(HashMap<String, String> param) { 
 	        log.info("@# MemServiceImpl.write() 메소드 실행됨.");
 	        
-	        param.put("profile_image", "DEFAULT.jpg");//이거 존나 애 먹음 ㅇㅇ 바탕화면에 jpg 있어야 함 아마?
 	        
 	        MemDAO dao = sqlSession.getMapper(MemDAO.class); 
 	        

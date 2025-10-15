@@ -23,6 +23,7 @@
                 <th>성별</th>
                 <th>프로필 이미지</th>
                 <th>수정</th>
+                <th>내 게시물</th>
                 <th>탈퇴</th>
             </tr>
         </thead>
@@ -57,9 +58,12 @@
                     </td>
              		<td>
                              <button type="button" onclick="location.href='mypage_edit?member_Id=${user.member_Id}'">수정</button>
+                             
 
                              </td>
-                              
+                              <td>
+                             <button type="button" onclick="location.href='myrecipe?member_Id=${user.member_Id}'">보기</button>
+                             </td>
                               <td>
                         <form action="delete" method="post" style="margin:0;">
                             <input type="hidden" name="member_Id" value="${user.member_Id}" />

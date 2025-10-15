@@ -1,6 +1,7 @@
 package com.lgy.YoRiZoRi.MY_Page.control;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lgy.YoRiZoRi.MY_Page.dto.MyPageDTO;
+import com.lgy.YoRiZoRi.MY_Page.dto.MyRecipeDTO;
 import com.lgy.YoRiZoRi.MY_Page.service.MyPageService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,13 @@ public class MyPageController {
 		    return "list"; 
 		}
 		
-
+		// 레시피 보여주기
+		@RequestMapping("/myrecipe")
+		public String myrecipe(@RequestParam("member_Id") String memberId, Model model) {
+		    List<MyRecipeDTO> recipeData = service.getById(memberId); 
+		    model.addAttribute("recipe", recipeData);
+		    return "myrecipe"; 
+		}
 	   
 	
 		@RequestMapping("/modify")
