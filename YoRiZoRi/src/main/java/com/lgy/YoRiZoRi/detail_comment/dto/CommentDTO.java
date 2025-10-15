@@ -16,6 +16,6 @@ public class CommentDTO {
 	private int cmt_depth;
 	private int recipe_id;
 	private String member_id;
-	private String cmt_content;
-	private Date created_ar;
+	private String content;
+	private Date created_at;
 }

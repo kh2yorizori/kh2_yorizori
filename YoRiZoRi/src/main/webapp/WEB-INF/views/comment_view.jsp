@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,36 +10,33 @@
 		function fn_submit(){
 			console.log("@@jsjs");
 			
-			var cmtContent = $("#cmt_content").val();
+			var cmtContent = $("#content").val();
 			
 	        if (cmtContent.trim() === "") {
-	            alert("³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	            alert("ë‚´ìš©ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            return;
 	        }
+	        
+	        var formData = $("#frm").serialize();
 			
-	        var contentData = {
-		            cmt_content: $("#cmt_content").val()
-		        };
-			
-	        var newCommentHtml = '<div class="p-4 border-b border-gray-200 bg-white rounded-lg shadow-sm mb-4">' +
-            '<p class="text-gray-700 mt-1 whitespace-pre-wrap">' + cmtContent + '</p>' +
-            '<div class="text-xs text-gray-400 mt-2">¹æ±İ ÀÛ¼ºµÊ (Å¬¶óÀÌ¾ğÆ® Å×½ºÆ®)</div>' +
+	        var newCommentHtml = '<div>' +
+            '<p>' + cmtContent + '</p>' +
+            '<div>ë°©ê¸ˆ ì‘ì„±ë¨ (í´ë¼ì´ì–¸íŠ¸ í…ŒìŠ¤íŠ¸)</div>' +
             '</div>';
 	        
 	        $("#comment-list").append(newCommentHtml);
-
-	        $("#cmt_content").val("");
+	        $("#content").val("");
 	        
 			$.ajax({
 				type:"post"
-				,data:contentData
-				,url:"comment_view"
+				,data:formData
+				,url:"write"
 				,success: function(data) {
-// 					alert("ÀúÀå¿Ï·á");	
-// 					document.getElementById("result").innerHTML = "<div>" + data + "</div>";
+					alert("ì €ì¥ì™„ë£Œ");	
+					document.getElementById("result").innerHTML = "<div>" + data + "</div>";
 				}
-				,error: function() {
-					alert("¿À·ù¹ß»ı");	
+				,error: function(error) {
+					alert("ì˜¤ë¥˜ë°œìƒ" + error);	
 					document.getElementById("result").innerHTML = "<h3>ajax fail</h3>";
 				}
 			});
@@ -47,31 +44,32 @@
 	</script>
 </head>
 <body>
-		<!-- ´ñ±Û ¸ñ·Ï Ç¥½Ã ¿µ¿ª -->
-        <h2 class="text-xl font-semibold mb-4 text-gray-800">´ñ±Û ¸ñ·Ï</h2>
+		<!-- ëŒ“ê¸€ ëª©ë¡ í‘œì‹œ ì˜ì—­ -->
+        <h2 >ëŒ“ê¸€ ëª©ë¡</h2>
         <div id="comment-list">
         </div>
         
-        <!-- AJAX Å×½ºÆ® °á°ú ¿µ¿ª -->
-        <p id="result" class="mt-6 p-3 bg-yellow-100 border border-yellow-300 rounded-md text-sm">
-            ¿©±â´Â ¼­¹ö Åë½Å (AJAX) °á°ú°¡ Ç¥½ÃµÇ´Â ¿µ¿ªÀÔ´Ï´Ù.
+        <!-- AJAX í…ŒìŠ¤íŠ¸ ê²°ê³¼ ì˜ì—­ -->
+        <p id="result" >
+            ì—¬ê¸°ëŠ” ì„œë²„ í†µì‹  (AJAX) ê²°ê³¼ê°€ í‘œì‹œë˜ëŠ” ì˜ì—­ì…ë‹ˆë‹¤.
         </p>
         
         
 	<table width="500" border="1">
 		<form method="post" id="frm">
-			<tr colspan="2">
+			<tr>
 				<td>nickname</td>
+				<td><input type="hidden" name="member_id" id="member_id" value="chef_kim"></td>
 			</tr>
 			<tr>
-				<td>³»¿ë</td>
+				<td>ë‚´ìš©</td>
 				<td>
-					<textarea rows="5" name="cmt_content" id="cmt_content"></textarea>
+					<textarea rows="3" name="content" id="content"></textarea>
 				</td>
 			</tr>
 			<tr colspan="2">
 				<td>
-					<input type="button" onclick="fn_submit()" value="´ñ±ÛÀÛ¼º">
+					<input type="button" onclick="fn_submit()" value="ëŒ“ê¸€ì‘ì„±">
 				</td>
 			</tr>
 		</form>
