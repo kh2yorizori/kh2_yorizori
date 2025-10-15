@@ -33,7 +33,7 @@
 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource"></beans:property>
 		<!-- 		sql 로 구성된 xml 경로 설정 -->
-		<beans:property name="mapperLocations" value="classpath:com/lgy/YoRiZoRi/*/dao/mapper/*.xml"></beans:property>
+		<beans:property name="mapperLocations" value="classpath:com/lgy/YoRiZoRi/Main_Page/dao/mapper/*.xml"></beans:property>
 	</beans:bean>
 	
 	<!-- 	SqlSessionTemplate 타입의 sqlSession 객체는 sqlSessionFactory 객체를 포함한다. -->
