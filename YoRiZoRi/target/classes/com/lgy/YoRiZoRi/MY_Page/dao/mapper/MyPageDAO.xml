@@ -6,14 +6,21 @@
 
 
        <select id="list" resultType="com.lgy.YoRiZoRi.MY_Page.dto.MyPageDTO">
-        SELECT member_Id, password, nickname, email, profile_image, phone_number, birthDate, gender
-        FROM member_tb
+        select member_Id, name,password, nickname, email, profile_image, phone_number, birthDate, gender
+        from member_tb
         ORDER BY member_Id
     </select>
     
+      <select id="getUserById" resultType="com.lgy.YoRiZoRi.MY_Page.dto.MyPageDTO">
+    select member_Id, name,password, nickname, email, profile_image, phone_number, birthDate, gender
+    from member_tb
+    where member_Id = #{member_Id}
+</select>
+    
+    
         <update id="modify">
 <!--     	update tbl_board set boardName=#{param2}, boardTitle=#{param3}, boardContent=#{param4} where boardNo=#{param1} -->
-    	update member_tb set password=#{password}, nickname=#{nickname}, email=#{email} ,profile_image = #{profile_image} ,phone_number=#{phone_number} , birthDate = #{birthDate},gender=#{gender}
+    	update member_tb set name=#{name}, nickname=#{nickname}, email=#{email} ,profile_image = #{profile_image} ,phone_number=#{phone_number} , birthDate = TO_DATE(#{birthDate}, 'YYYY-MM-DD'),gender=#{gender}
     	 where member_Id=#{member_Id}
     </update>
     
@@ -23,7 +30,3 @@
     </delete>
 
 </mapper>
-
-
-
-

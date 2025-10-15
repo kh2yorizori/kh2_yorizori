@@ -31,6 +31,7 @@ public class MyPageServiceImpl implements MyPageService {
 //				 , request.getParameter("boardName")
 //				 , request.getParameter("boardTitle")
 //				 , request.getParameter("boardContent"));
+	
 		dao.modify(param);
 	}
 
@@ -41,6 +42,10 @@ public class MyPageServiceImpl implements MyPageService {
 		dao.delete(param);
 	}
 
+	@Override
+	public MyPageDTO getUserById(String memberId) {
+	    MyPageDAO dao = sqlSession.getMapper(MyPageDAO.class);
+	    return dao.getUserById(memberId);
+	}
+
 }
-
-

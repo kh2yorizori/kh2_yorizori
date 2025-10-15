@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.YoRiZoRi.login.dao.MemDAO">
+
+
+
+<select id="loginYn" resultType="com.lgy.YoRiZoRi.login.dto.MemDTO"> 
+
+SELECT * FROM member_tb WHERE MEMBER_ID = #{MEMBER_ID} AND password = #{PASSWORD} 
+
+</select>
+<insert id="write" parameterType="java.util.HashMap"> 
+INSERT INTO member_tb ( member_id, name, password, nickname, email, profile_image, phone_number, birthdate, gender )	
+ VALUES 
+ ( #{MEMBER_ID}, #{NAME}, #{PASSWORD}, #{NICKNAME}, #{EMAIL}, #{profile_image}, #{PHONE_NUMBER}, TO_DATE(#{BIRTHDATE}, 'YYYY-MM-DD'), #{GENDER} ) 
+</insert>
+</mapper>
