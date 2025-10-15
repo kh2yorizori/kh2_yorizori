@@ -141,6 +141,14 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		
+		<!-- Jackson (JSON) Library for automatic conversion of Java Objects to JSON/XML -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.15.2</version> <!-- 사용 중인 Spring 버전에 맞는 최신 버전을 사용하세요 -->
+		</dependency>
+		
 	</dependencies>
     <build>
         <plugins>

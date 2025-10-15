@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript">
@@ -30,6 +30,7 @@
 			$.ajax({
 				type:"post"
 				,data:formData
+// 				,dataType:"json"
 				,url:"write"
 				,success: function(data) {
 					alert("저장완료");	
