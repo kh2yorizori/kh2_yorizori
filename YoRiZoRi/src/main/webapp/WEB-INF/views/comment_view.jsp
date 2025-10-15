@@ -33,7 +33,7 @@
 			$.ajax({
 				type:"post"
 				,data:contentData
-				,url:"write_view"
+				,url:"comment_view"
 				,success: function(data) {
 // 					alert("저장완료");	
 // 					document.getElementById("result").innerHTML = "<div>" + data + "</div>";

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class ReviewController {
+	/*
 	@Autowired(required = false)
 	private ReviewService service;
 	
@@ -45,4 +46,5 @@ public class ReviewController {
 		
 		return "review_view";
 	}
+	*/
 }
