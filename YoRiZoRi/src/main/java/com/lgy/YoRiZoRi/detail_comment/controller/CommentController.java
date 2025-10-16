@@ -2,7 +2,6 @@ package com.lgy.YoRiZoRi.detail_comment.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,19 +38,22 @@ public class CommentController {
 	// POST 요청만 처리하며, @ResponseBody를 통해 뷰 리턴 없이 성공/실패 문자열을 클라이언트에 반환
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
     @ResponseBody // <--- AJAX 처리
-	public CommentDTO write(CommentDTO dto) { 
+	public CommentDTO write_con(CommentDTO dto) { 
 		log.info("@# write() - POST 요청 처리");
         log.info("@# Received Comment Data: {}", dto); // DTO 데이터 로그 확인
 		
 		try {
-            service.write(dto);
+			CommentDTO savedDto = service.write(dto);
+//            service.write(dto);
             
             dto.setCreated_at(new Date());
-            log.info("@# Return DTO with current time: {}", dto.getCreated_at());
-            return dto;
+            log.info("@# Return DTO with current time and IDs: {}", savedDto);
+            
+            return savedDto;
         } catch (Exception e) {
             log.error("@# DB Insert Failed!", e);
-            return  new CommentDTO(); 
+            
+            return new CommentDTO(); 
         }
 	}
 	

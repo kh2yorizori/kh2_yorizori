@@ -4,16 +4,50 @@
     
 <mapper namespace="com.lgy.YoRiZoRi.detail_comment.dao.CommentDAO">
 	<select id="list" resultType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
+		SELECT *
+        FROM comment_tb
+        ORDER BY ref_id ASC, cmt_step ASC
 	</select>
 
 	<insert id="write">
 		insert into comment_tb
-		(ref_id, cmt_step, cmt_depth,
-		 recipe_id, member_id, content) values
-		 (3, 0, 0, 1, #{member_id}, #{content})
+		(ref_id, cmt_step, cmt_depth, recipe_id, member_id, content) values
+		 (#{ref_id}, #{cmt_step}, #{cmt_depth}, #{recipe_id}, #{member_id}, #{content})
 	</insert>
-	<select id="getWroteTime">
-		select created_at from comment_tb where comment_id=#{comment_id};
-	</select>
-
+	
+	<insert id="writeTopLevel"  parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO" useGeneratedKeys="true" keyProperty="comment_id">
+    <selectKey keyProperty="ref_id" resultType="int" order="BEFORE">
+        SELECT COMMENT_TB_SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+    	INSERT INTO comment_tb (
+            comment_id, ref_id, cmt_step, cmt_depth,
+            content, member_id, created_at
+        ) VALUES (
+            #{comment_id}, #{ref_id}, 0, 0,
+            #{content}, #{member_id}, SYSDATE
+        )
+    </insert>
+	
+	<insert id="writeReply" parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
+    INSERT INTO comment_tb (
+            comment_id, ref_id, cmt_step, cmt_depth,
+            content, member_id, created_at
+        ) VALUES (
+            COMMENT_TB_SEQ.NEXTVAL, #{ref_id}, #{cmt_step}, #{cmt_depth},
+            #{content}, #{member_id}, SYSDATE
+        )
+	</insert>
+	
+	<select id="getParentComment" parameterType="int" resultType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
+        SELECT comment_id, ref_id, cmt_step, cmt_depth
+        FROM comment_tb
+        WHERE comment_id = #{comment_id}
+    </select>
+	
+	<update id="updateStep" parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
+        UPDATE comment_tb
+        SET cmt_step = cmt_step + 1
+        WHERE ref_id = #{ref_id}
+        AND cmt_step > #{cmt_step}
+    </update>
 </mapper>
