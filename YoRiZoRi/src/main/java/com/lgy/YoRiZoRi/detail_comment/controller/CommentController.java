@@ -1,6 +1,7 @@
 package com.lgy.YoRiZoRi.detail_comment.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,37 +35,23 @@ public class CommentController {
 		return "comment_view"; // list 화면을 보여줄 뷰 이름을 반환
 	}
 	
-//	public ArrayList<CommentDTO> list(Model model) {
-//		log.info("@# list()");
-//		
-//		ArrayList<CommentDTO> list = service.list();
-//		model.addAttribute("list", list);
-//		return list;
-//	}
-	
-	
-//	@RequestMapping("/write")
-//	public String write(@RequestParam CommentDTO dto) {
-//		log.info("@# write()");
-//		
-//		service.write(dto);
-//		
-//		return "redirect:comment_view";
-//	}
 	
 	// POST 요청만 처리하며, @ResponseBody를 통해 뷰 리턴 없이 성공/실패 문자열을 클라이언트에 반환
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
     @ResponseBody // <--- AJAX 처리
-	public String write(CommentDTO dto) { 
+	public CommentDTO write(CommentDTO dto) { 
 		log.info("@# write() - POST 요청 처리");
         log.info("@# Received Comment Data: {}", dto); // DTO 데이터 로그 확인
 		
 		try {
             service.write(dto);
-            return "SUCSSESS";
+            
+            dto.setCreated_at(new Date());
+            log.info("@# Return DTO with current time: {}", dto.getCreated_at());
+            return dto;
         } catch (Exception e) {
             log.error("@# DB Insert Failed!", e);
-            return null; 
+            return  new CommentDTO(); 
         }
 	}
 	
@@ -75,17 +62,22 @@ public class CommentController {
 		return "comment_view";
 	}
 
-	@RequestMapping(value = "/getWroteTime", method = RequestMethod.POST)
-	@ResponseBody
-	public String get_wroteTime(CommentDTO dto) {
-		log.info("@# get_wroteTime()");
-		
-		try {
-			String time = service.getWroteTime(dto);
-			return time;
-		} catch(Exception e) {
-			log.error("@# DB select Failed!", e);
-			return null;
-		}
-	}
 }
+
+//	public ArrayList<CommentDTO> list(Model model) {
+//		log.info("@# list()");
+//		
+//		ArrayList<CommentDTO> list = service.list();
+//		model.addAttribute("list", list);
+//		return list;
+//	}
+
+
+//	@RequestMapping("/write")
+//	public String write(@RequestParam CommentDTO dto) {
+//		log.info("@# write()");
+//		
+//		service.write(dto);
+//		
+//		return "redirect:comment_view";
+//	}
