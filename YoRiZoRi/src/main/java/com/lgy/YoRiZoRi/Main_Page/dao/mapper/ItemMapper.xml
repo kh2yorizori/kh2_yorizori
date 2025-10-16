@@ -1,0 +1,81 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.YoRiZoRi.Main_Page.dao.ItemDAO">
+
+<!--     <select id="list" resultType="com.lgy.jungshin.dto.ItemDTO"> -->
+<!--         select name, price, description from item -->
+<!--     </select> -->
+
+
+<!--     <select id="list" resultType="com.lgy.jungshin.dto.ItemDTO"> -->
+<!-- 		select recipe_id, member_id, title, description, serving_size, main_image, created_at, difficulty, cooking_time, hit from recipe -->
+<!--     </select> -->
+<!--     <select id="list" resultType="com.lgy.jungshin.dto.ItemDTO"> -->
+<!-- 		select r.recipe_id, r.member_id, r.title, r.description, r.serving_size, r.main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, r2.rating from recipe r, review r2 where r.recipe_id = r2.recipe_id -->
+<!--     </select> -->
+
+
+    <select id="list" resultType="com.lgy.YoRiZoRi.Main_Page.dto.ItemDTO">
+	    select r.recipe_id, r.member_id, r.title, r.description, r.serving_size, r.main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, r2.rating from recipe r, review r2 where r.recipe_id = r2.recipe_id
+    </select>
+    
+<!--     <select id="list_rating" parameterType="map" resultType="com.lgy.jungshin.dto.ItemDTO"> -->
+<!-- 		select r.recipe_id, r.member_id, r.title, r.description, r.serving_size, r.main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, r2.rating from recipe r, review r2 where r.recipe_id = r2.recipe_id order by ${category} asc -->
+<!--     </select> -->
+
+<!-- 	전체에서 인기순 평점순 검색 -->
+<!-- 	<select id="list_rating" parameterType="map" resultType="com.lgy.jungshin.dto.ItemDTO" flushCache="true"> -->
+<!-- 	    select r.recipe_id, r.member_id, r.title, r.description, r.serving_size, r.main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, r2.rating from recipe r, review r2 where r.recipe_id = r2.recipe_id -->
+<!-- 		SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, AVG(r2.rating) AS rating FROM recipe r JOIN review r2 ON r.recipe_id = r2.recipe_id GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, r.hit order by ${order} desc -->
+<!-- 		SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, NVL(AVG(r2.rating), 0) AS rating, rc.category_id, c.name FROM recipe r LEFT OUTER JOIN review r2 ON r.recipe_id = r2.recipe_id  JOIN recipe_category rc ON r.recipe_id = rc.recipe_id JOIN category c ON rc.category_id = c.category_id GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, r.hit, rc.category_id, c.name order by ${order} desc, r.recipe_id asc -->
+<!-- 	</select> -->
+	
+<!-- 	카테고리와 정렬방법을 골라서 세부 검색 -->
+<!-- 	<select id="list_rating_detail" parameterType="map" resultType="com.lgy.jungshin.dto.ItemDTO" flushCache="true"> -->
+<!--	    select r.recipe_id, r.member_id, r.title, r.description, r.serving_size, r.main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, r2.rating from recipe r, review r2 where r.recipe_id = r2.recipe_id -->
+<!-- 		SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, AVG(r2.rating) AS rating FROM recipe r JOIN review r2 ON r.recipe_id = r2.recipe_id GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, r.hit order by ${order} desc -->
+<!-- 		SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, NVL(AVG(r2.rating), 0) AS rating, rc.category_id, c.name FROM recipe r LEFT OUTER JOIN review r2 ON r.recipe_id = r2.recipe_id  JOIN recipe_category rc ON r.recipe_id = rc.recipe_id JOIN category c ON rc.category_id = c.category_id where rc.category_id = ${category} GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, r.hit, rc.category_id, c.name order by ${order} desc, r.recipe_id asc -->
+<!-- 	</select> -->
+
+
+<!-- 	<select id="list_rating" parameterType="map" resultType="com.lgy.jungshin.dto.ItemDTO" flushCache="true"> -->
+<!-- 	  SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty, r.cooking_time, r.hit, NVL(AVG(r2.rating), 0) AS rating, rc.category_id, c.name FROM recipe r LEFT OUTER JOIN review r2 ON r.recipe_id = r2.recipe_id JOIN recipe_category rc ON r.recipe_id = rc.recipe_id JOIN category c ON rc.category_id = c.category_id -->
+<!-- 	  <where> -->
+<!-- 	    <if test="category != null and category != 0"> -->
+<!-- 	      rc.category_id = #{category}  -->
+<!-- 	    </if> -->
+<!-- 	  </where> -->
+<!-- 	  GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, r.hit, rc.category_id, c.name ORDER BY ${order} DESC, r.recipe_id ASC -->
+<!-- 	</select> -->
+	<select id="list_rating" parameterType="map" resultType="com.lgy.YoRiZoRi.Main_Page.dto.ItemDTO">
+	  SELECT r.recipe_id, r.member_id, r.title, r.description, r.serving_size,
+	         TO_CHAR(r.main_image) AS main_image, r.created_at, r.difficulty,
+	         r.cooking_time, r.hit, NVL(AVG(r2.rating), 0) AS rating,
+	         rc.category_id, c.name
+	  FROM recipe r 
+	  LEFT OUTER JOIN review r2 ON r.recipe_id = r2.recipe_id  
+	  JOIN recipe_category rc ON r.recipe_id = rc.recipe_id 
+	  JOIN category c ON rc.category_id = c.category_id
+	  <where>
+	    <if test="categoryList != null and categoryList.size() > 0">
+	      rc.category_id IN 
+	      <foreach item="cat" collection="categoryList" open="(" separator="," close=")">
+	        #{cat}
+	      </foreach>
+	    </if>
+	  </where>
+	  GROUP BY r.recipe_id, r.member_id, r.title, r.description, r.serving_size, 
+	           TO_CHAR(r.main_image), r.created_at, r.difficulty, r.cooking_time, 
+	           r.hit, rc.category_id, c.name
+	  ORDER BY ${order} DESC, r.recipe_id ASC
+	</select>
+
+
+
+    <insert id="write">
+    	insert into item(name, price, description) values(#{name},#{price},#{description})
+    </insert>
+    
+</mapper>
