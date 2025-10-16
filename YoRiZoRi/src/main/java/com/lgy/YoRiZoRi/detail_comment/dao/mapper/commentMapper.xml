@@ -20,10 +20,10 @@
         SELECT COMMENT_TB_SEQ.NEXTVAL FROM DUAL
     </selectKey>
     	INSERT INTO comment_tb (
-            comment_id, ref_id, cmt_step, cmt_depth,
+            ref_id, cmt_step, cmt_depth,
             content, member_id, created_at
         ) VALUES (
-            #{comment_id}, #{ref_id}, 0, 0,
+            #{ref_id}, 0, 0,
             #{content}, #{member_id}, SYSDATE
         )
     </insert>
