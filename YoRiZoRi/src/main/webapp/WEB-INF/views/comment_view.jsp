@@ -19,46 +19,56 @@
 		    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
 		}
 
-		// 전역 변수로 현재 작성 중인 댓글의 부모 ID를 저장
-		// 0이면 최상위 댓글, 아니면 부모 댓글의 comment_id
-		var currentRefId = 0; 
-		
+// ========================fn_open_reply_form(parent_comment_id) =====================
 		// '대댓글 작성' 버튼 클릭 시 호출될 함수
 		function fn_open_reply_form(parent_comment_id) {
-		    // 댓글 작성 폼을 대댓글 모드로 전환
-		    currentRefId = parent_comment_id;
+			// 1. 폼의 ref_id 필드 값을 부모 댓글 ID로 설정
+			    $("#ref_id").val(parent_comment_id);
 		    
-		    // 폼 위에 부모 댓글 정보 등을 표시해주는 것도 좋습니다.
-		    $("#form-title").text("대댓글 작성 (부모 ID: " + parent_comment_id + ")");
-		    
-		    // Optionally, move the form near the parent comment or focus on the textarea.
-		    $("#content").focus(); 
+			// 2. 폼 제목 변경 및 포커스
+			    $("#form-title").text("대댓글 작성 (부모 ID: " + parent_comment_id + ")");
+			    $("#content").focus(); 
+			    
+			// 3. '대댓글 취소' 버튼 표시
+			    $("#cancel-reply-btn").show();
 		}
-
+		
+// ========================fn_cancel_reply() =====================
+		// '대댓글 취소' 버튼 클릭 시 호출될 함수
+		function fn_cancel_reply() {
+		    // 1. ref_id를 최상위 댓글인 0으로 재설정
+		    $("#ref_id").val(0);
+		    
+		    // 2. 폼 초기화
+		    $("#form-title").text("새 댓글 작성");
+		    $("#content").val('');
+		    
+		    // 3. 취소 버튼 숨기기
+		    $("#cancel-reply-btn").hide();
+		}
+		
+// ======================fn_submit()===============================
 		function fn_submit(){
 			console.log("@@@ fn_submit()");
 			
+// 			var cmtContent = $("#content").val();
+// 			var memberId = $("#member_id").val();
+// 			var refId = $("ref_id").val();
+// 			var commentId = refId;
+
 			var cmtContent = $("#content").val();
-			var memberId = $("#member_id").val();
-			
+
+// 	        formData += "&comment_id=" + commentId;
+	        
 	        if (cmtContent.trim() === "") {
 	            alert("내용을 입력해주세요.");
 	            return;
 	        }
-	        
 	        var formData = $("#frm").serialize();
+	        
+	    	$("#content").val("");
+			
 
-	     // 대댓글인 경우 ref_id를 폼 데이터에 추가
-			if (currentRefId > 0) {
-				formData += "&ref_id=" + currentRefId;
-			} else {
-				// 최상위 댓글인 경우 ref_id=0을 명시적으로 추가하거나 서버에서 처리 (여기서는 서버 처리 가정)
-				// 현재 DTO에 ref_id가 int이므로, 폼에 ref_id 필드가 없으면 null/0으로 바인딩될 수 있음.
-				// 명시적으로 추가하는 것이 안전합니다.
-				formData += "&ref_id=0"; 
-			}
-	     
-	        $("#content").val("");
 	        
 			$.ajax({
 				type:"post"
@@ -67,9 +77,8 @@
 				,dataType: "json"
 				,success: function(data) {
 					// data는 서버에서 반환된 CommentDTO의 JSON 객체
-					
-					if (!data || !data.created_at) {
-                    alert("저장 실패 또는 시간 정보 누락");
+					if (!data || !data.member_id || !data.created_at) {
+                    alert("저장 실패 또는 시간 정보 누락(ID/시간)");
                     document.getElementById("result").innerHTML = "<h3>DB 저장 실패 또는 응답 데이터 오류</h3>";
 					}
                     // 시간 포맷팅 및 최종 댓글 추가
@@ -78,18 +87,16 @@
     				
     				// ** 중요: cmt_depth에 따라 들여쓰기 추가 **
     				var paddingLeft = (data.cmt_depth * 20) + 'px'; 
-        				var finalCommentHtml = '<div id="comment-' + data.comment_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px; margin-left: ' + paddingLeft + ';">' +
+        				var finalCommentHtml = '<div id="comment_' + data.comment_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px; margin-left: ' + paddingLeft + ';">' +
                         '<strong>' + data.member_id + '</strong>' +
                         '<p style="margin: 5px 0;">' + data.content + '</p>' +
                         '<div style="color: #007bff; font-size: 0.8em;">작성일시: ' + wroteTime + '</div>' +
                         // fn_open_reply_form 호출 시 현재 댓글의 ID (data.comment_id) 전달
                         '<input type="button" name="reply" onclick="fn_open_reply_form(' + data.comment_id + ')" value="대댓글작성"></div>';
-                        $("#comment-list").append(finalCommentHtml);
+                        
+    				$("#comment-list").append(finalCommentHtml);
     					
-    					// 댓글 작성 후 폼 초기화
-    					currentRefId = 0;
-    					$("#form-title").text("새 댓글 작성");
-                    
+    			
 //     				var finalCommentHtml = '<div style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px;">' +
 //                     '<strong>' + data.member_id + '</strong>' +
 //                     '<p style="margin: 5px 0;">' + data.content + '</p>' +
@@ -97,11 +104,14 @@
 //                     '<input type="button" name="reply" onclick="fn_submit()" value="대댓글작성"></div>';
 //                     $("#comment-list").append(finalCommentHtml);
                     
+                    // 댓글 작성 후 폼 초기화 (대댓글 모드 해제)
+    				fn_cancel_reply();
                     document.getElementById("result").innerHTML = "<div>DB 저장 성공! 작성 시각: " + wroteTime + "</div>";
                	 }
-				,error: function(error) {
-					alert("오류발생" + error);	
-					document.getElementById("result").innerHTML = "<h3>ajax fail</h3>";
+				,error: function(jqXHR, textStatus, errorThrown) {
+					console.error("AJAX Error:", textStatus, errorThrown, jqXHR.responseText);
+					alert("오류발생: 서버 응답을 확인하세요.");	
+					document.getElementById("result").innerHTML = "<h3>ajax fail: " + textStatus + "</h3>";
 				}
 			});
 		};
@@ -130,9 +140,16 @@
 						<textarea rows="3" name="content" id="content"></textarea>
 					</td>
 				</tr>
+				<tr>
+                    <td colspan="2">
+                        <input type="hidden" name="ref_id" id="ref_id" value="0">
+                    </td>
+                </tr>
 				<tr colspan="2">
 				<td>
 					<input type="button" onclick="fn_submit()" value="댓글작성">
+					<!-- 대댓글 취소 -->
+                    <input type="button" id="cancel-reply-btn" onclick="fn_cancel_reply()" value="대댓글 취소" style="display:none; background-color: #f8d7da; border: 1px solid #f5c6cb;">
 				</td>
 			</tr>
 		</form>

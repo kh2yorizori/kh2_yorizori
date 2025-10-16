@@ -15,7 +15,7 @@
 		 (#{ref_id}, #{cmt_step}, #{cmt_depth}, #{recipe_id}, #{member_id}, #{content})
 	</insert>
 	
-	<insert id="writeTopLevel"  parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO" useGeneratedKeys="true" keyProperty="ref_id">
+	<insert id="writeTopLevel"  parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
     <selectKey keyProperty="comment_id" resultType="int" order="BEFORE">
         SELECT COMMENT_TB_SEQ.NEXTVAL FROM DUAL
     </selectKey>
@@ -23,20 +23,32 @@
             comment_id, ref_id, cmt_step, cmt_depth,
             content, member_id, created_at
         ) VALUES (
-            #{comment_id}, #{ref_id}, 0, 0,
+            ${comment_id}, ${ref_id}, 0, 0,
             #{content}, #{member_id}, SYSDATE
         )
     </insert>
+    
+<!--     ### SQL: INSERT INTO comment_tb (             comment_id, ref_id, cmt_step, cmt_depth,             content, member_id, created_at         ) VALUES (             ?, ?, ?, ?,             ?, ?, SYSDATE         ) -->
+    
 	
 	<insert id="writeReply" parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
-    INSERT INTO comment_tb (
+    	INSERT INTO comment_tb (
             comment_id, ref_id, cmt_step, cmt_depth,
             content, member_id, created_at
         ) VALUES (
-            COMMENT_TB_SEQ.NEXTVAL, #{ref_id}, #{cmt_step}, #{cmt_depth},
+            (select MAX(comment_id)+1 from comment_tb), #{ref_id}, #{cmt_step}, #{cmt_depth},
             #{content}, #{member_id}, SYSDATE
         )
 	</insert>
+<!-- 	<insert id="writeReply" parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO"> -->
+<!--     	INSERT INTO comment_tb ( -->
+<!--             comment_id, ref_id, cmt_step, cmt_depth, -->
+<!--             content, member_id, created_at -->
+<!--         ) VALUES ( -->
+<!--             (SELECT COMMENT_TB_SEQ.NEXTVAL FROM DUAL), #{ref_id}, #{cmt_step}, #{cmt_depth}, -->
+<!--             #{content}, #{member_id}, SYSDATE -->
+<!--         ) -->
+<!-- 	</insert> -->
 	
 	<select id="getParentComment" parameterType="int" resultType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
         SELECT comment_id, ref_id, cmt_step, cmt_depth
