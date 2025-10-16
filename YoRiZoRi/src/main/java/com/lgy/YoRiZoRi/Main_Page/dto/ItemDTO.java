@@ -19,7 +19,7 @@ public class ItemDTO {
 	private String title;
 	private String description;
 	private int serving_size;
-	private String main_image;
+	private String mainImage;
 	private Date created_at;
 	private int difficulty;
 	private String coocking_time;

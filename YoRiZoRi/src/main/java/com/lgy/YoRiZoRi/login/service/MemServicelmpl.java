@@ -2,45 +2,36 @@ package com.lgy.YoRiZoRi.login.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.lgy.YoRiZoRi.login.dao.MemDAO;
 import com.lgy.YoRiZoRi.login.dto.MemDTO;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class MemServicelmpl implements MemService{
+public class MemServicelmpl implements MemService {
 
-	@Autowired
-	private SqlSession sqlSession;
-	
-	@Override
-	public ArrayList<MemDTO> loginYn(String id, String pw) {
-		// MyBatis의 getMapper 메소드를 통해 MemDAO 인터페이스의 구현체를 얻음
-				MemDAO dao = sqlSession.getMapper(MemDAO.class);
-				
-				// DAO의 loginYn 메소드를 호출하여 ID와 PW를 전달하고, 결과를 반환받습니다.
-				// 로그인 성공 시: 회원 정보가 담긴 ArrayList (크기 1)
-				// 로그인 실패 시: 비어있는 ArrayList (크기 0)
-				ArrayList<MemDTO> dtos = dao.loginYn(id, pw);
-				
-				return dtos;
-	}
+    @Autowired
+    private MemDAO memDAO;
+    
+    @Override
+    public ArrayList<MemDTO> loginYn(HashMap<String, String> param) {
+        log.info("@# MemServiceImpl.loginYn() start");
+        return memDAO.loginYn(param);
+    }
+    
+    @Override
+    public void write(HashMap<String, String> param) {
+        log.info("@# MemServiceImpl.write() start");
+        param.putIfAbsent("PROFILE_IMAGE", "default_profile.jpg");
+        memDAO.write(param);
+    }
 
-	 @Override
-	    public void write(HashMap<String, String> param) { 
-	        log.info("@# MemServiceImpl.write() 메소드 실행됨.");
-	        
-	        param.put("profile_image", "DEFAULT.jpg");//이거 존나 애 먹음 ㅇㅇ 바탕화면에 jpg 있어야 함 아마?
-	        
-	        MemDAO dao = sqlSession.getMapper(MemDAO.class); 
-	        
-	        dao.write(param);
-	    }
-	
+    // [추가] 지시받은 getMemberInfo 업무를 실제로 처리하는 방법
+    @Override
+    public MemDTO getMemberInfo(String memberId) {
+        log.info("@# MemServiceImpl.getMemberInfo() start for ID: " + memberId);
+        return memDAO.getMemberInfo(memberId);
+    }
 }

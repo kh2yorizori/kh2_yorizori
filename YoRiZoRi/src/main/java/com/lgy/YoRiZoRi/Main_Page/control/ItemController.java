@@ -96,6 +96,11 @@ public class ItemController {
 		
 		return "login";
 	}
+	@RequestMapping("home")
+	public String home() {
+		
+		return "home";
+	}
 	
 }
 

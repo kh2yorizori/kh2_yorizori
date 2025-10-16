@@ -2,18 +2,15 @@ package com.lgy.YoRiZoRi.login.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lgy.YoRiZoRi.login.dto.MemDTO;
 import com.lgy.YoRiZoRi.login.service.MemService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -26,72 +23,87 @@ public class MemController {
     // 로그인 화면
     @RequestMapping("/login")
     public String login() {
-    	log.info("@# login: ");
+        log.info("@# GET /login");
         return "login";
     }
 
     // 로그인 처리
     @RequestMapping("/login_yn")
-    public String login_yn(HttpServletRequest request, HttpSession session) {
-    	log.info("@# login_yn: "+request.getParameter("MEMBER_ID"));
+    public String login_yn(HttpServletRequest request) { 
+        log.info("@# POST /login_yn: " + request.getParameter("MEMBER_ID"));
         
-    	String id =request.getParameter("MEMBER_ID"); 
-    	String pw =request.getParameter("PASSWORD"); 
-    	
-    	ArrayList<MemDTO> dtos = memService.loginYn(id, pw);
-    	
-    	if(dtos.isEmpty()) {
-    		request.setAttribute("msg","아이디 또는 비번이 잘못 되었습니다.");
-    		request.setAttribute("url","login");
-//    		return "redirect:login";
-    		return "alert";
-    	}else {
-    		//세션에 이름이랑 아이디 저장
-    		session.setAttribute("id", dtos.get(0).getMEMBER_ID());
-    		session.setAttribute("name", dtos.get(0).getNAME());
-    		
-    		return "redirect:login_ok";
-    	}
+        String id = request.getParameter("MEMBER_ID"); 
+        String pw = request.getParameter("PASSWORD"); 
+        
+        HashMap<String, String> param = new HashMap<String, String>();
+        param.put("MEMBER_ID", id);
+        param.put("PASSWORD", pw);
+        
+        ArrayList<MemDTO> dtos = memService.loginYn(param);
+        
+        if (dtos == null || dtos.isEmpty()) {
+            request.setAttribute("msg", "아이디 또는 비밀번호가 잘못 되었습니다.");
+            request.setAttribute("url", "login");
+            return "alert";
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("id", dtos.get(0).getMemberId());
+            session.setAttribute("name", dtos.get(0).getName());
+            return "redirect:login_ok";
+        }
     }
+
     // 로그인 성공 화면
     @RequestMapping("/login_ok")
     public String login_ok(HttpSession session) {
-    	log.info("@# login_ok"+session.getAttribute("id")); //하나 배움 ㅋ
+        log.info("@# GET /login_ok, session ID: " + session.getAttribute("id"));
         return "login_ok";
     }
 
- // 회원가입 화면
+    // 회원가입 화면
     @RequestMapping("/register")
     public String register() {
-        log.info("@# register");
+        log.info("@# GET /register");
         return "register";
     }
 
     @RequestMapping("/registerOk")
- // 파라미터에 HttpSession session 을 추가해줍니다.
- public String registerOk(@RequestParam HashMap<String, String> param, HttpSession session) {
-     log.info("@# registerOk");
-     log.info("@# registerOk" + param);
-     
-     // 1. 서비스 호출해서 DB에 회원정보 저장
-     memService.write(param);
-     
-     // 2. DB 저장이 성공했으므로, 바로 세션을 만들어줍니다.
-     //    param 맵에 사용자가 입력한 정보가 모두 들어있습니다.
-     session.setAttribute("id", param.get("MEMBER_ID"));
-     session.setAttribute("name", param.get("NAME"));
-     
-     // 3. 로그인 페이지 대신 login_ok 페이지로 리다이렉트합니다.
-     return "redirect:login_ok"; 
- }
- // 로그아웃 기능 추가 (이전 답변 참고)
+    public String registerOk(@RequestParam HashMap<String, String> param, HttpSession session) {
+        log.info("@# POST /registerOk: " + param);
+        
+        memService.write(param);
+        
+        session.setAttribute("id", param.get("MEMBER_ID"));
+        session.setAttribute("name", param.get("NAME"));
+        
+        return "redirect:login_ok"; 
+    }
+
+    // 로그아웃
     @RequestMapping("/logout")
-    public String logout(HttpServletRequest request ) {
-        log.info("@# logout");
+    public String logout(HttpServletRequest request) {
+        log.info("@# GET /logout");
         HttpSession session = request.getSession(false);
         if (session != null) {
-			session.invalidate();
-		} 
-        return "redirect:login";
+            session.invalidate();
+        } 
+        return "redirect:/login"; // 경로 일관성을 위해 '/' 추가
     }
+    
+ // 마이페이지 조회 (mypage.jsp를 보여주는 역할)
+    @RequestMapping("/mypage")
+    public String mypage(HttpSession session, Model model) {
+        log.info("@# GET /mypage");
+        String memberId = (String) session.getAttribute("id");
+        if (memberId == null) {
+            return "redirect:/login";
+        }
+        
+        MemDTO memberInfo = memService.getMemberInfo(memberId);
+        model.addAttribute("member", memberInfo);
+        log.info("@# mypage for user: " + memberId);
+        
+        return "mypage"; 
+    }
+    
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.YoRiZoRi.login.dao.MemDAO">
+
+	<resultMap id="memResultMap" type="com.lgy.YoRiZoRi.login.dto.MemDTO">
+        <result property="memberId"     column="MEMBER_ID"/>
+        <result property="name"         column="NAME"/>
+        <result property="password"     column="PASSWORD"/>
+        <result property="nickname"     column="NICKNAME"/>
+        <result property="email"        column="EMAIL"/>
+        <result property="profileImage" column="PROFILE_IMAGE"/>
+        <result property="phoneNumber"  column="PHONE_NUMBER"/>
+        <result property="birthdate"    column="BIRTHDATE"/>
+        <result property="gender"       column="GENDER"/>
+        <result property="joinDate"     column="JOIN_DATE"/>
+    </resultMap>
+
+    <select id="loginYn" parameterType="java.util.HashMap" resultMap="memResultMap">
+        SELECT *
+        FROM member_tb 
+        WHERE 
+            MEMBER_ID = #{MEMBER_ID} AND password = #{PASSWORD}
+    </select>
+    
+    <!-- 회원가입 쿼리는 HashMap을 사용하므로 그대로 둡니다. -->
+    <insert id="write" parameterType="java.util.HashMap">
+        INSERT INTO member_tb ( 
+            member_id, name, password, nickname, email, 
+            profile_image, phone_number, birthdate, gender 
+        ) VALUES ( 
+            #{MEMBER_ID}, #{NAME}, #{PASSWORD}, #{NICKNAME}, #{EMAIL}, 
+            #{PROFILE_IMAGE}, #{PHONE_NUMBER}, TO_DATE(#{BIRTHDATE}, 'YYYY-MM-DD'), #{GENDER} 
+        )
+    </insert>
+    
+	<select id="getMemberInfo" parameterType="string" resultMap="memResultMap">
+        SELECT * FROM member_tb 
+        WHERE MEMBER_ID = #{id}
+    </select>
+
+</mapper>
