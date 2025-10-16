@@ -1,0 +1,59 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.YoRiZoRi.MY_Page.dao.MyPageDAO">
+
+    <resultMap id="myPageResultMap" type="com.lgy.YoRiZoRi.MY_Page.dto.MyPageDTO">
+        <result property="memberId"     column="MEMBER_ID"/>
+        <result property="password"     column="PASSWORD"/>
+        <result property="name"         column="NAME"/>
+        <result property="nickname"     column="NICKNAME"/>
+        <result property="email"        column="EMAIL"/>
+        <result property="profileImage" column="PROFILE_IMAGE"/>
+        <result property="phoneNumber"  column="PHONE_NUMBER"/>
+        <result property="birthdate"    column="BIRTHDATE"/>
+        <result property="gender"       column="GENDER"/>
+    </resultMap>
+    
+    <resultMap id="myRecipeResultMap" type="com.lgy.YoRiZoRi.MY_Page.dto.MyRecipeDTO">
+        <result property="recipeId"     column="RECIPE_ID"/>
+        <result property="memberId"     column="MEMBER_ID"/>
+        <result property="title"        column="TITLE"/>
+        <result property="description"  column="DESCRIPTION"/>
+        <result property="servingSize"  column="SERVING_SIZE"/>
+        <result property="mainImage"    column="MAIN_IMAGE"/>
+        <result property="createAt"     column="CREATED_AT"/>
+        <result property="cookingTime"  column="COOKING_TIME"/>
+        <result property="difficulty"   column="DIFFICULTY"/>
+        <result property="hit"          column="HIT"/>
+        <result property="commentCount" column="COMMENT_COUNT"/>
+    </resultMap>
+
+    <select id="getUserById" parameterType="string" resultMap="myPageResultMap">
+        SELECT * FROM member_tb WHERE member_Id = #{id}
+    </select>
+    
+    <select id="getById" parameterType="string" resultMap="myRecipeResultMap">
+        SELECT * FROM recipe WHERE member_id = #{id}
+    </select>
+    
+    <update id="modify" parameterType="java.util.HashMap">
+        UPDATE member_tb 
+        SET 
+            name = #{name}, 
+            nickname = #{nickname}, 
+            email = #{email},
+            profile_image = #{profile_image},
+            phone_number = #{phone_number}, 
+            birthDate = TO_DATE(#{birthDate}, 'YYYY-MM-DD'),
+            gender = #{gender}
+        WHERE 
+            member_Id = #{member_Id}
+    </update>
+    
+    <delete id="delete" parameterType="java.util.HashMap">
+        DELETE FROM member_tb WHERE member_Id = #{member_Id}
+    </delete>
+    
+</mapper>
