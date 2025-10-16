@@ -15,15 +15,15 @@
 		 (#{ref_id}, #{cmt_step}, #{cmt_depth}, #{recipe_id}, #{member_id}, #{content})
 	</insert>
 	
-	<insert id="writeTopLevel"  parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO" useGeneratedKeys="true" keyProperty="comment_id">
-    <selectKey keyProperty="ref_id" resultType="int" order="BEFORE">
+	<insert id="writeTopLevel"  parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO" useGeneratedKeys="true" keyProperty="ref_id">
+    <selectKey keyProperty="comment_id" resultType="int" order="BEFORE">
         SELECT COMMENT_TB_SEQ.NEXTVAL FROM DUAL
     </selectKey>
     	INSERT INTO comment_tb (
-            ref_id, cmt_step, cmt_depth,
+            comment_id, ref_id, cmt_step, cmt_depth,
             content, member_id, created_at
         ) VALUES (
-            #{ref_id}, 0, 0,
+            #{comment_id}, #{ref_id}, 0, 0,
             #{content}, #{member_id}, SYSDATE
         )
     </insert>
@@ -41,7 +41,7 @@
 	<select id="getParentComment" parameterType="int" resultType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">
         SELECT comment_id, ref_id, cmt_step, cmt_depth
         FROM comment_tb
-        WHERE comment_id = #{comment_id}
+        WHERE comment_id = #{ref_id}
     </select>
 	
 	<update id="updateStep" parameterType="com.lgy.YoRiZoRi.detail_comment.dto.CommentDTO">

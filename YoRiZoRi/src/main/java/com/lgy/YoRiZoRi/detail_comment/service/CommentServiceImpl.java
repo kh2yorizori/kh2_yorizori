@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 			// 2-2. 댓글 순서(cmt_step) 확보: 
 			// 현재 부모 댓글의 cmt_step보다 큰 모든 댓글들의 step을 1씩 증가시켜 
 			// 새로 들어올 댓글이 부모 댓글 바로 아래에 위치할 공간을 만듭니다.
-			dao.updateStep(parent); 
+			dao.updateStep(dto); 
 			
 			// 2-3. 새 댓글의 cmt_step, cmt_depth 설정
 			// 새로운 댓글의 step은 부모의 step보다 1 크게 설정
