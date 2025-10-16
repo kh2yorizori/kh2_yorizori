@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.YoRiZoRi.Recipe.dao.RecipeDAO">
+
+    <insert id="insertRecipe" parameterType="com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT recipe_id_seq.CURRVAL FROM DUAL
+        </selectKey>
+        INSERT INTO recipe (
+            member_id, title, description, serving_size, 
+            difficulty, cooking_time, main_image
+        ) VALUES (
+            'test_user', #{title}, #{description}, #{servingSize}, 
+            #{difficulty}, #{cookingTime}, #{mainImage}
+        )
+    </insert>
+
+    <insert id="insertStep" parameterType="com.lgy.YoRiZoRi.Recipe.dto.StepDTO">
+        INSERT INTO recipe_step (recipe_id, step_number, instruction)
+        VALUES (#{recipeId}, #{stepNumber}, #{instruction})
+    </insert>
+
+    <insert id="insertStepImage" parameterType="com.lgy.YoRiZoRi.Recipe.dto.StepDTO">
+        INSERT INTO recipe_step_image (recipe_id, step_number, image_url)
+        VALUES (#{recipeId}, #{stepNumber}, #{image})
+    </insert>
+    
+    <insert id="insertIngredient" parameterType="com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO">
+        <selectKey keyProperty="ingredientId" resultType="int" order="AFTER">
+            SELECT ingredient_ingredient_id_seq.CURRVAL FROM DUAL
+        </selectKey>
+        INSERT INTO ingredient(name) VALUES(#{name})
+    </insert>
+    
+    <insert id="insertRecipeIngredient" parameterType="com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO">
+        INSERT INTO recipe_ingredient(recipe_id, ingredient_id, quantity)
+        VALUES(#{recipeId}, #{ingredientId}, #{quantity}) 
+    </insert>
+    
+    <select id="findIngredientByName" parameterType="string" resultType="com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO">
+        SELECT ingredient_id, name FROM ingredient WHERE name = #{name}
+    </select>
+
+</mapper>
