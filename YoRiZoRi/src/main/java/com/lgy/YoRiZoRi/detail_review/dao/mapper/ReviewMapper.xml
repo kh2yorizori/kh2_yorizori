@@ -9,11 +9,21 @@
 		where review_id=#{review_id}
 		order by review_id ASC
 	</select>
+	
+	<select id="findById" resultType="com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO">
+        SELECT review_id, recipe_id, member_id, content, rating, image, created_at
+        FROM review
+        WHERE review_id = #{review_id}
+    </select>
 
-	<insert id="write" parameterType="com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO">
+	<insert id="write" parameterType="com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO"
+	useGeneratedKeys="true" keyProperty="review_id">
+		<selectKey keyProperty="review_id" resultType="int" order="BEFORE">
+            SELECT REVIEW_ID_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
 		insert into review
-		(recipe_id, member_id, content, rating) values
-		(#{recipe_id}, #{member_id}, #{content}, #{rating})
+		(review_id, recipe_id, member_id, content, rating)
+		values
+		(#{review_id}, #{recipe_id}, #{member_id}, #{content}, #{rating})
 	</insert>
-
 </mapper>

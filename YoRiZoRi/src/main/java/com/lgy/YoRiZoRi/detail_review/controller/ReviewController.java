@@ -15,8 +15,8 @@ import com.lgy.YoRiZoRi.detail_review.service.ReviewService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Controller
+@Slf4j
 public class ReviewController {
 	
 	@Autowired(required = true)
@@ -35,19 +35,18 @@ public class ReviewController {
 	// POST 요청만 처리하며, @ResponseBody를 통해 뷰 리턴 없이 성공/실패 문자열을 클라이언트에 반환
 		@RequestMapping(value = "/write/review", method = RequestMethod.POST)
 	    @ResponseBody // <--- AJAX 처리
-		public ReviewDTO write_con(ReviewDTO dto) { 
+		public ReviewDTO write_rev(ReviewDTO dto) { 
 			log.info("@# write() - POST 요청 처리");
 	        log.info("@# Received Review Data: {}", dto); // DTO 데이터 로그 확인
 			
 			try {
 				ReviewDTO savedDto = service.write(dto);
-//	            service.write(dto);
-	            
-	            dto.setCreated_at(new Date());
+				
 	            log.info("@# Return DTO with current time and IDs: {}", savedDto);
 	            
 	            return savedDto;
 	        } catch (Exception e) {
+	        	e.printStackTrace();
 	            log.error("@# DB Insert Failed!", e);
 	            
 	            return new ReviewDTO(); 

@@ -106,7 +106,6 @@
 //                     $("#comment-list").append(finalCommentHtml);
                     
                     // 댓글 작성 후 폼 초기화 (대댓글 모드 해제)
-    				fn_cancel_reply();
                     document.getElementById("result").innerHTML = "<div>DB 저장 성공! 작성 시각: " + wroteTime + "</div>";
                	 }
 				,error: function(jqXHR, textStatus, errorThrown) {

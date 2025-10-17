@@ -13,7 +13,7 @@ import com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-	@Autowired
+	@Autowired(required = true)
 	private SqlSession sqlSession;
 	
 	@Override
@@ -28,9 +28,11 @@ public class ReviewServiceImpl implements ReviewService {
 	public ReviewDTO write(ReviewDTO dto) {
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
 			
-		System.out.println("!@!@$ review impl 마지막 완성된 dto" + dto);
+//		System.out.println("!@!@$ review impl 마지막 완성된 dto" + dto);
 		dao.write(dto);
-		return dto;
+		ReviewDTO completeDto = dao.findById(dto.getReview_id());
+		
+		return completeDto;
 	}
 
 }
