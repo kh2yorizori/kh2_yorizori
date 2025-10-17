@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO {
-	private int comment_id;
-	private int ref_id;
-	private int cmt_step;
-	private int cmt_depth;
+	private int review_id;
 	private int recipe_id;
 	private String member_id;
-	private String cmt_content;
-	private Date created_ar;
+	private String content;
+	private int rating;
+	private String image;
+	private Date created_at;
 }

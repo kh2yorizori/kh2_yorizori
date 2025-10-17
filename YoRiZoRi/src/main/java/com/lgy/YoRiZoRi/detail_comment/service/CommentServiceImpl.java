@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
 			// (Controller에서 DTO 바인딩 시 ref_id가 설정됩니다.)
 			
 			// 2-4. 대댓글 저장
-			System.out.println("!@!@$ impl 마지막 완성된 dto" + dto);
+			System.out.println("!@!@$ comment_impl 마지막 완성된 dto" + dto);
 			dao.writeReply(dto);
 			return dto;
 		}

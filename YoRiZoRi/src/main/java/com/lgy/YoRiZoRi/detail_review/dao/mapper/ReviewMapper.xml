@@ -4,16 +4,16 @@
     
 <mapper namespace="com.lgy.YoRiZoRi.detail_review.dao.ReviewDAO">
 	<select id="list" resultType="com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO">
-		select  review_id, recipe_id, member_id, content, rating, image, created_at
+		select review_id, recipe_id, member_id, content, rating, image, created_at
 		from review
 		where review_id=#{review_id}
+		order by review_id ASC
 	</select>
 
-	<insert id="write">
+	<insert id="write" parameterType="com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO">
 		insert into review
-		(review_id, recipe_id, member_id, content, rating, image, created_at) values
-		(#{review_id}, #{recipe_id}, #{member_id}, #{content},
-		 #{rating}, #{image}, #{created_at})
+		(recipe_id, member_id, content, rating) values
+		(#{recipe_id}, #{member_id}, #{content}, #{rating})
 	</insert>
 
 </mapper>

@@ -87,12 +87,13 @@
     				
     				// ** 중요: cmt_depth에 따라 들여쓰기 추가 **
     				var paddingLeft = (data.cmt_depth * 20) + 'px'; 
-        				var finalCommentHtml = '<div id="comment_' + data.comment_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px; margin-left: ' + paddingLeft + ';">' +
-                        '<strong>' + data.member_id + '</strong>' +
-                        '<p style="margin: 5px 0;">' + data.content + '</p>' +
-                        '<div style="color: #007bff; font-size: 0.8em;">작성일시: ' + wroteTime + '</div>' +
-                        // fn_open_reply_form 호출 시 현재 댓글의 ID (data.comment_id) 전달
-                        '<input type="button" name="reply" onclick="fn_open_reply_form(' + data.comment_id + ')" value="대댓글작성"></div>';
+    				
+       				var finalCommentHtml = '<div id="comment_' + data.comment_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px; margin-left: ' + paddingLeft + ';">' +
+                       '<strong>' + data.member_id + '</strong>' +
+                       '<p style="margin: 5px 0;">' + data.content + '</p>' +
+                       '<div style="color: #007bff; font-size: 0.8em;">작성일시: ' + wroteTime + '</div>' +
+                       // fn_open_reply_form 호출 시 현재 댓글의 ID (data.comment_id) 전달
+                       '<input type="button" name="reply" onclick="fn_open_reply_form(' + data.comment_id + ')" value="대댓글작성"></div>';
                         
     				$("#comment-list").append(finalCommentHtml);
     					

@@ -1,83 +1,96 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript">
 		function fn_submit(){
 			console.log("@@jsjs");
 			
-			var cmtContent = $("#cmt_content").val();
+			var ReviewContent = $("#content").val();
 			
-	        if (cmtContent.trim() === "") {
-	            alert("³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	        if (ReviewContent.trim() === "") {
+	            alert("ë‚´ìš©ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            return;
 	        }
 			
-	        var contentData = {
-		            cmt_content: $("#cmt_content").val()
-		        };
-			
-	        var newCommentHtml = '<div class="p-4 border-b border-gray-200 bg-white rounded-lg shadow-sm mb-4">' +
-            '<p class="text-gray-700 mt-1 whitespace-pre-wrap">' + cmtContent + '</p>' +
-            '<div class="text-xs text-gray-400 mt-2">¹æ±İ ÀÛ¼ºµÊ (Å¬¶óÀÌ¾ğÆ® Å×½ºÆ®)</div>' +
-            '</div>';
+	        var formData = $("#frm").serialize();
 	        
-	        $("#comment-list").append(newCommentHtml);
-
-	        $("#cmt_content").val("");
+	        $("#content").val("");
 	        
-			$.ajax({
+	        $.ajax({
 				type:"post"
-				,data:contentData
-				,url:"write_view"
-				,success: function(data) {
-// 					alert("ÀúÀå¿Ï·á");	
-// 					document.getElementById("result").innerHTML = "<div>" + data + "</div>";
-				}
-				,error: function() {
-					alert("¿À·ù¹ß»ı");	
-					document.getElementById("result").innerHTML = "<h3>ajax fail</h3>";
-				}
-			});
-		};
+				,data:formData
+				,url:"/write/review"
+				,dataType: "json"
+					,success: function(data) {
+						if (!data || !data.member_id || !data.created_at || !data.recipe_id) {
+		                    alert("ì €ì¥ ì‹¤íŒ¨ ë˜ëŠ” ì‹œê°„ ì •ë³´ ëˆ„ë½(ì‚¬ìš©ìID/ì‹œê°„/ë ˆì‹œí”¼ID)");
+		                    document.getElementById("result").innerHTML = "<h3>DB ì €ì¥ ì‹¤íŒ¨ ë˜ëŠ” ì‘ë‹µ ë°ì´í„° ì˜¤ë¥˜</h3>";
+							}
+						
+						var wroteTime = formatTime(data.created_at);
+	    				alert("ì €ì¥ì™„ë£Œ (DB ì €ì¥ ì‹œê°: " + wroteTime + ")");
+	    				
+	    				var finalCommentHtml = '<div id="review_' + data.comment_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px;">' +
+				   	    					   '<img src="" alt="ì‚¬ìš©ìê°€ ì—…ë¡œë“œí•œ ì‚¬ì§„" width="50px";hight="50px">'+	Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  
+	    				   					   '<strong>' + data.member_id + '</strong>' +
+	    				   Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  '<p style="margin: 5px 0;">' + data.content + '</p>' +
+	    				   Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  '<div style="color: #007bff; font-size: 0.8em;">ì‘ì„±ì¼ì‹œ: ' + wroteTime + '</div>';
+	    				
+					},error : function(jqXHR, textStatus, errorThrown) {
+						console.error("AJAX Error:", textStatus, errorThrown, jqXHR.responseText);
+						alert("ì˜¤ë¥˜ë°œìƒ: ì„œë²„ ì‘ë‹µì„ í™•ì¸í•˜ì„¸ìš”.");	
+						document.getElementById("result").innerHTML = "<h3>ajax fail: " + textStatus + "</h3>";
+					}
+	        });
+			
+// 	        var newReviewHtml = '<div class="p-4 border-b border-gray-200 bg-white rounded-lg shadow-sm mb-4">' +
+//             '<p class="text-gray-700 mt-1 whitespace-pre-wrap">' + ReviewContent + '</p>' +
+//             '<div class="text-xs text-gray-400 mt-2">ë°©ê¸ˆ ì‘ì„±ë¨ (í´ë¼ì´ì–¸íŠ¸ í…ŒìŠ¤íŠ¸)</div>' +
+//             '</div>';
+	        
+	        $("#review-list").append(finalCommentHtml);
+
 	</script>
 </head>
 <body>
-		<!-- ´ñ±Û ¸ñ·Ï Ç¥½Ã ¿µ¿ª -->
-        <h2 class="text-xl font-semibold mb-4 text-gray-800">´ñ±Û ¸ñ·Ï</h2>
-        <div id="comment-list">
+		<!-- ëŒ“ê¸€ ëª©ë¡ í‘œì‹œ ì˜ì—­ -->
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">í›„ê¸° ëª©ë¡</h2>
+        <div id="review-list">
         </div>
         
-        <!-- AJAX Å×½ºÆ® °á°ú ¿µ¿ª -->
+        <!-- AJAX í…ŒìŠ¤íŠ¸ ê²°ê³¼ ì˜ì—­ -->
         <p id="result" class="mt-6 p-3 bg-yellow-100 border border-yellow-300 rounded-md text-sm">
-            ¿©±â´Â ¼­¹ö Åë½Å (AJAX) °á°ú°¡ Ç¥½ÃµÇ´Â ¿µ¿ªÀÔ´Ï´Ù.
+            ì—¬ê¸°ëŠ” ì„œë²„ í†µì‹  (AJAX) ê²°ê³¼ê°€ í‘œì‹œë˜ëŠ” ì˜ì—­ì…ë‹ˆë‹¤.
         </p>
         
         
 	<table width="500" border="1">
 		<form method="post" id="frm">
+		<input type="hidden" name="recipe_id" id="recipe_id" value="1">
+		
 			<tr colspan="2">
 				<td>nickname</td>
 			</tr>
 			<tr>
-				<td>ÀÌ¹ÌÁö µî·Ï</td>
+				<td name="image" id="image">ì´ë¯¸ì§€ ë“±ë¡</td>
 			</tr>
 			<tr>
-				<td>º°Á¡</td>
-				<td>º°º°º°º°º°</td>
+				<td>ë³„ì </td>
+				<td name="rating" id="rating">ë³„ë³„ë³„ë³„ë³„</td>
 			</tr>
-				<td>³»¿ë</td>
+				<td>ë‚´ìš©</td>
 				<td>
 					<textarea rows="5" name="content" id="content"></textarea>
 				</td>
 			</tr>
 			<tr colspan="2">
 				<td>
-					<input type="button" onclick="fn_submit()" value="´ñ±ÛÀÛ¼º">
+					<input type="button" onclick="fn_submit()" value="í›„ê¸°ì‘ì„±">
 				</td>
 			</tr>
 		</form>

@@ -9,7 +9,7 @@ import com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO;
 
 public interface ReviewDAO {
 	public ArrayList<ReviewDTO> list();
-	public void write(HashMap<String, String> param);
+	public void write(ReviewDTO dto);
 //	public CommentDTO contentView(HashMap<String, String> param);
 //	public void modify(HashMap<String, String> param);
 //	public void delete(HashMap<String, String> param);
