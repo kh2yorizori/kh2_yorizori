@@ -17,4 +17,7 @@ public class ReviewDTO {
 	private int rating;
 	private String image;
 	private Date created_at;
+	private String id;
+	private String name;
+	private byte[] img;
 }

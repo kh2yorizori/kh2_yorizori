@@ -26,4 +26,20 @@
 		values
 		(#{review_id}, #{recipe_id}, #{member_id}, #{content}, #{rating})
 	</insert>
+	
+	<insert id="saveImage">
+		<![CDATA[
+			insert into images (id, name, img)
+			values 
+			(#{id}, #{name}, #{img})
+		]]>
+	</insert>
+
+	<select id="selectImage" resultType="map">
+		<![CDATA[
+			select img from images where id=#{id}
+		]]>
+	</select>
+	
+	
 </mapper>

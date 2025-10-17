@@ -47,10 +47,10 @@
 						var wroteTime = formatTime(data.created_at);
 	    				alert("저장완료 (DB 저장 시각: " + wroteTime + ")");
 	    				
-	    				var finalReviewHtml = '<div id="review_' + data.review_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px;">' +
-				   	    					   '<img src="" alt="사용자가 업로드한 사진" width="50px";hight="50px">'+	                    
-	    				   					   '<strong>' + data.member_id + '</strong>' +
-	    				   					   '<div style="font-size: 1.2em; color: orange;">별점: ' + data.rating + '점</div>' +
+	    				var finalReviewHtml = '<div id="review_' + data.review_id + '" style="border: 1px solid #007bff; padding: 10px; margin-bottom: 5px; border-radius: 4px;">
+				   	    					   + data.image +'<img src="" alt="사용자가 업로드한 사진" width="50px";hight="50px">'+	                    
+	    				   					   '<br>작성자 ID : <strong>' + data.member_id + '</strong>' +
+	    				   					   '<div style="color: orange;">별점: ' + data.rating + '점</div>' +
 	    				                       '<p style="margin: 5px 0;">' + data.content + '</p>' +
 	    				                       '<div style="color: #007bff; font-size: 0.8em;">작성일시: ' + wroteTime + '</div>';
 
@@ -63,6 +63,35 @@
 						alert("오류발생: 서버 응답을 확인하세요.");	
 						document.getElementById("result").innerHTML = "<h3>ajax fail: " + textStatus + "</h3>";
 					}
+	        });
+		};
+		
+		function upload(){
+	        var form = $("#fileUploadForm").val();
+	        var data = new FormData(form);
+	        data.append("member_id", $("member_id"));
+	        $("#btnUpload").prop('disabled', true);
+	        
+	        $.ajax({
+	            type: "POST",
+	            enctype: "multipart/form-data",
+	            url: "${pageContext.request.contextPath}/write/upload",
+	            data: data,
+	            processData: false,
+	            contentType: false,
+	            cache: false,
+	            timeout: 600000,
+	            success: function (data) {
+	                $("#result").text(data.member_id);
+	                $("#image").append(data.file);
+	                console.log("SUCCESS : ", data);
+	                $("#btnUpload").prop('disabled', false);
+	            },
+	            error: function (e) {
+	                $("#result").text(e.responseText);
+	                console.log("ERROR : ", e);
+	                $("#btnUpload").prop('disabled', false);
+	            }
 	        });
 		};
 			
@@ -95,7 +124,13 @@
 				<td>nickname</td>
 			</tr>
 			<tr>
-				<td name="image" id="image">이미지 등록</td>
+				<td>
+					<img src="#" name="image" id="image" alt="후기대표사진"><br/>
+					<input type="file" name="file" id="file"/><br/>
+					<input type="button" name="btnUpload" id="btnUpload" 
+					method="POST" enctype="multipart/form-data" value="이미지 등록"
+					onclick="upload()"> 
+				</td>
 			</tr>
 			<tr>
 				<td>별점</td>
@@ -114,6 +149,8 @@
 			</tr>
 		</table>
 		</form>
-	
+	<pre>
+        <span id="result"></span>
+    </pre>
 </body>
 </html>

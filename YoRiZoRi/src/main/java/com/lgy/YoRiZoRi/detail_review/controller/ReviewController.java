@@ -1,14 +1,16 @@
 package com.lgy.YoRiZoRi.detail_review.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lgy.YoRiZoRi.detail_review.dto.ReviewDTO;
 import com.lgy.YoRiZoRi.detail_review.service.ReviewService;
@@ -59,5 +61,22 @@ public class ReviewController {
 		
 		return "review_view";
 	}
+	
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public String uploadImage(@RequestParam MultipartFile file, String member_id) throws Exception {
+		// 파일 내용 byte[]로 변환
+	    byte[] fileBytes = file.getBytes();
+	    String fileName = file.getOriginalFilename();
+	    String fileId = UUID.randomUUID().toString(); // 파일 ID 생성
+	    
+	    ReviewDTO dto = service.findById(member_id);
+	    dto.setId(fileId);
+	    dto.setName(fileName);
+	    dto.setImg(fileBytes);
+	    
+	    return "redirect:review_view";
+	}
+	
+	
 	
 }
