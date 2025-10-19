@@ -30,30 +30,39 @@
         <result property="commentCount" column="COMMENT_COUNT"/>
     </resultMap>
 
+    <select id="list" resultMap="myPageResultMap">
+        SELECT member_Id, name, password, nickname, email, profile_image, phone_number, birthDate, gender
+        FROM member_tb
+        where not admin_ck = 1
+        ORDER BY member_Id
+    </select>
+    
     <select id="getUserById" parameterType="string" resultMap="myPageResultMap">
-        SELECT * FROM member_tb WHERE member_Id = #{id}
+        SELECT member_Id, name, password, nickname, email, profile_image, phone_number, birthDate, gender
+        FROM member_tb
+        WHERE member_Id = #{memberId}
     </select>
     
     <select id="getById" parameterType="string" resultMap="myRecipeResultMap">
         SELECT * FROM recipe WHERE member_id = #{id}
     </select>
-    
-    <update id="modify" parameterType="java.util.HashMap">
+
+    <update id="modify" parameterType="hashmap">
         UPDATE member_tb 
         SET 
             name = #{name}, 
             nickname = #{nickname}, 
             email = #{email},
-            profile_image = #{profile_image},
-            phone_number = #{phone_number}, 
-            birthDate = TO_DATE(#{birthDate}, 'YYYY-MM-DD'),
+            profile_image = #{profileImage, jdbcType=CLOB}, -- CLOB 타입 명시
+            phone_number = #{phoneNumber}, 
+            birthDate = TO_DATE(#{birthdate}, 'YYYY-MM-DD'), 
             gender = #{gender}
         WHERE 
-            member_Id = #{member_Id}
+            member_Id = #{memberId}
     </update>
     
-    <delete id="delete" parameterType="java.util.HashMap">
-        DELETE FROM member_tb WHERE member_Id = #{member_Id}
+    <delete id="delete" parameterType="hashmap">
+        DELETE FROM member_tb WHERE member_Id = #{memberId}
     </delete>
     
 </mapper>

@@ -4,7 +4,7 @@
 
 <mapper namespace="com.lgy.YoRiZoRi.Recipe.dao.RecipeDAO">
 
-    <insert id="insertRecipe" parameterType="com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO">
+<insert id="insertRecipe" parameterType="com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO">
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             SELECT recipe_id_seq.CURRVAL FROM DUAL
         </selectKey>
@@ -12,10 +12,10 @@
             member_id, title, description, serving_size, 
             difficulty, cooking_time, main_image
         ) VALUES (
-            'test_user', #{title}, #{description}, #{servingSize}, 
+            #{memberId}, #{title}, #{description}, #{servingSize}, 
             #{difficulty}, #{cookingTime}, #{mainImage}
         )
-    </insert>
+        </insert>
 
     <insert id="insertStep" parameterType="com.lgy.YoRiZoRi.Recipe.dto.StepDTO">
         INSERT INTO recipe_step (recipe_id, step_number, instruction)
@@ -42,5 +42,16 @@
     <select id="findIngredientByName" parameterType="string" resultType="com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO">
         SELECT ingredient_id, name FROM ingredient WHERE name = #{name}
     </select>
+
+	<select id="findAllCategories" resultType="com.lgy.YoRiZoRi.Recipe.dto.CategoryDTO">
+        SELECT category_id AS categoryId, name 
+        FROM category 
+        ORDER BY category_id ASC
+    </select>
+
+    <insert id="insertRecipeCategory" parameterType="java.util.Map">
+        INSERT INTO recipe_category (recipe_id, category_id)
+        VALUES (#{recipeId}, #{categoryId})
+    </insert>
 
 </mapper>

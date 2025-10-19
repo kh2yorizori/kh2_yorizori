@@ -18,4 +18,6 @@ public class MemDTO {
     private Date birthdate;
     private Integer gender;
     private Date joinDate;
+    private int Adminck;
+    
 }

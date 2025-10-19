@@ -1,5 +1,8 @@
 package com.lgy.YoRiZoRi.Recipe.service;
 
+import java.util.List; // [추가]
+
+import com.lgy.YoRiZoRi.Recipe.dto.CategoryDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO;
 
 public interface RecipeService {
@@ -10,4 +13,10 @@ public interface RecipeService {
 	 * @throws Exception
 	 */
 	void registerRecipe(RecipeDTO recipeDTO, String uploadPath) throws Exception;
+
+	/**
+	 * [추가] 모든 카테고리 목록을 조회합니다.
+	 * @return 카테고리 DTO 리스트
+	 */
+	List<CategoryDTO> getAllCategories();
 }

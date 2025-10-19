@@ -1,10 +1,13 @@
 package com.lgy.YoRiZoRi.Recipe.dao;
 
+import java.util.List; // [추가]
+import java.util.Map;  // [추가]
+
+import com.lgy.YoRiZoRi.Recipe.dto.CategoryDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.StepDTO;
 
-// @Mapper 어노테이션 삭제!
 public interface RecipeDAO {
     // 레시피 기본 정보
     void insertRecipe(RecipeDTO recipeDTO);
@@ -16,7 +19,11 @@ public interface RecipeDAO {
     // 재료
     void insertIngredient(IngredientDTO ingredientDTO);
     void insertRecipeIngredient(IngredientDTO ingredientDTO);
-    
-    // [추가] 재료 이름으로 ingredient_id를 찾는 메소드
     IngredientDTO findIngredientByName(String name);
+    
+    // [추가] 모든 카테고리 목록을 조회하는 메소드 선언
+    List<CategoryDTO> findAllCategories();
+
+    // [추가] recipe_category 테이블에 데이터를 삽입하는 메소드 선언
+    void insertRecipeCategory(Map<String, Integer> params);
 }

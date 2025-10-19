@@ -13,6 +13,7 @@ public class RecipeDTO {
     
     // DB 테이블과 매칭되는 필드들
     private Integer id;
+    private String memberId;
     private String title;
     private String description;
     private Integer servingSize;
@@ -26,4 +27,7 @@ public class RecipeDTO {
     // 1:N 관계의 다른 DTO 리스트
     private List<IngredientDTO> ingredients;
     private List<StepDTO> steps;
+    
+    // [추가] 폼에서 선택된 카테고리 ID들을 받을 필드
+    private Integer categoryId;
 }

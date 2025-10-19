@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
+
 public class ItemController {
 	@Autowired
 	private ItemService service;
@@ -96,11 +97,27 @@ public class ItemController {
 		
 		return "login";
 	}
-	@RequestMapping("home")
-	public String home() {
-		
-		return "home";
-	}
+	
+    @RequestMapping("home")
+    public String home(Model model) { // Model model 파라미터 추가
+        log.info("@# home() with random recipes"); // 로그 메시지 수정
+
+        // 1. 서비스에 랜덤 레시피를 가져오는 메소드 호출 (추가 필요)
+        ArrayList<ItemDTO> randomList = service.getRandomRecipes(); 
+        
+        
+        if (randomList == null) {
+            log.info("@# [ERROR] randomList is NULL");
+        } else {
+            log.info("@# Found random recipes (size): " + randomList.size());
+        }
+        
+        // 2. 모델에 "randomRecipes"라는 이름으로 데이터 추가
+        model.addAttribute("randomRecipes", randomList);
+        
+        return "home"; // home.jsp로 데이터를 가지고 이동
+    }
+// ...
 	
 }
 
