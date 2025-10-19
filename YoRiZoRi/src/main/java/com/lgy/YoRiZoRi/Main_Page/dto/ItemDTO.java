@@ -14,15 +14,15 @@ public class ItemDTO {
 //	private int price;
 //	private String description;
 	
-	private int recipe_Id;
+	private int recipeId;
 	private String member_Id;
 	private String title;
 	private String description;
-	private int serving_size;
-	private String main_image;
+	private int servingSize;
+	private String mainImage;
 	private Date created_at;
 	private int difficulty;
-	private String coocking_time;
+	private String cookingTime;
 	private int hit;
 	private int rating;
 }
