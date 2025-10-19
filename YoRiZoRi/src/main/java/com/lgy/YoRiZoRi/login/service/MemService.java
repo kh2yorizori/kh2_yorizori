@@ -12,4 +12,10 @@ public interface MemService {
 
     // [추가] 마이페이지를 위한 회원 정보 조회 업무를 지시서에 추가
     MemDTO getMemberInfo(String memberId); 
+    
+    // 중복 확인 서비스 메소드 추가
+    int idCheck(String memberId);
+    int nicknameCheck(String nickname);
+    int emailCheck(String email);
+    int phoneCheck(String phoneNumber);
 }

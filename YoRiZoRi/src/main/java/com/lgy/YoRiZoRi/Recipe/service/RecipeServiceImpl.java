@@ -1,6 +1,9 @@
 package com.lgy.YoRiZoRi.Recipe.service;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.lgy.YoRiZoRi.Recipe.dao.RecipeDAO;
+import com.lgy.YoRiZoRi.Recipe.dto.CategoryDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.StepDTO;
@@ -57,7 +61,7 @@ public class RecipeServiceImpl implements RecipeService {
             log.info("조리 순서 " + recipeDTO.getSteps().size() + "개 저장 완료.");
         }
         
-        // 3. 재료 저장 로직 (최종 수정본)
+        // 3. 재료 저장 로직
         if (recipeDTO.getIngredients() != null) {
             for (IngredientDTO currentIngredient : recipeDTO.getIngredients()) {
                 // 3-1. DB에 해당 이름의 재료가 있는지 먼저 '조회'합니다.
@@ -65,7 +69,6 @@ public class RecipeServiceImpl implements RecipeService {
                 
                 if (foundIngredient == null) {
                     // 3-2. 조회 결과가 없으면(null), '신규' 재료이므로 DB에 INSERT 합니다.
-                    //      이 호출은 UNIQUE 제약조건 오류를 일으키지 않습니다.
                     recipeDAO.insertIngredient(currentIngredient);
                     log.info("신규 재료 등록: " + currentIngredient.getName() + ", 생성된 ID: " + currentIngredient.getIngredientId());
                 } else {
@@ -82,6 +85,35 @@ public class RecipeServiceImpl implements RecipeService {
             }
             log.info("재료 " + recipeDTO.getIngredients().size() + "개 연결 완료.");
         }
+
+     // 4. [수정] 카테고리 저장 로직
+        // 'getCategoryIds'를 'getCategoryId'로 변경하고, 반복문을 제거합니다.
+        if (recipeDTO.getCategoryId() != null) { 
+            
+            // 반복문이 필요 없어졌습니다.
+            // for (Integer categoryId : recipeDTO.getCategoryIds()) { // (이전 코드)
+            
+            Map<String, Integer> params = new HashMap<String, Integer>();
+            params.put("recipeId", recipeDTO.getId());
+            params.put("categoryId", recipeDTO.getCategoryId()); // DTO에서 단일 ID를 가져옵니다.
+            recipeDAO.insertRecipeCategory(params);
+            
+            // } // (이전 코드)
+            
+            // 로그 메시지도 단일 ID를 찍도록 변경합니다.
+            log.info("카테고리 ID: " + recipeDTO.getCategoryId() + " 연결 완료.");
+        }
+
         log.info("레시피 등록 성공!");
+    }
+
+    /**
+     * [추가] 모든 카테고리 목록을 조회합니다.
+     * @return 카테고리 DTO 리스트
+     */
+    @Override
+    public List<CategoryDTO> getAllCategories() {
+        log.info("모든 카테고리 목록을 조회합니다.");
+        return recipeDAO.findAllCategories();
     }
 }

@@ -53,5 +53,10 @@ public class ItemServiceImpl implements ItemService {
 	    return dao.list_rating(param);
 	}
 
-	
+	@Override
+    public ArrayList<ItemDTO> getRandomRecipes() {
+        // log.info("@# getRandomRecipes()"); // 로그 사용시
+        ItemDAO dao = sqlSession.getMapper(ItemDAO.class);
+        return dao.getRandomRecipes();
+    }
 }

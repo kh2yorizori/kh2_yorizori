@@ -40,4 +40,21 @@
         WHERE MEMBER_ID = #{id}
     </select>
 
+	  <select id="idCheck" parameterType="string" resultType="int">
+        SELECT count(*) FROM member_tb WHERE MEMBER_ID = #{memberId}
+    </select>
+    
+    <select id="nicknameCheck" parameterType="string" resultType="int">
+        SELECT count(*) FROM member_tb WHERE NICKNAME = #{nickname}
+    </select>
+    
+    <select id="emailCheck" parameterType="string" resultType="int">
+        SELECT count(*) FROM member_tb WHERE EMAIL = #{email}
+    </select>
+    
+    <select id="phoneCheck" parameterType="string" resultType="int">
+        SELECT count(*) FROM member_tb WHERE PHONE_NUMBER = #{phoneNumber}
+    </select>
+    
 </mapper>
+

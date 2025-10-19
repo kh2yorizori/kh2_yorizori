@@ -25,10 +25,29 @@ public class MemDAOImpl implements MemDAO {
         sqlSession.insert(NAMESPACE + ".write", param);
     }
 
-    // [추가] 인터페이스에 새로 추가된 getMemberInfo 메소드의 실제 구현
     @Override
     public MemDTO getMemberInfo(String memberId) {
-        // ID는 하나이므로, 결과가 하나만 나오는 selectOne 메소드를 사용합니다.
         return sqlSession.selectOne(NAMESPACE + ".getMemberInfo", memberId);
+    }
+    
+    // ===== 중복 확인 메소드 구현 추가 =====
+    @Override
+    public int idCheck(String memberId) {
+        return sqlSession.selectOne(NAMESPACE + ".idCheck", memberId);
+    }
+
+    @Override
+    public int nicknameCheck(String nickname) {
+        return sqlSession.selectOne(NAMESPACE + ".nicknameCheck", nickname);
+    }
+
+    @Override
+    public int emailCheck(String email) {
+        return sqlSession.selectOne(NAMESPACE + ".emailCheck", email);
+    }
+
+    @Override
+    public int phoneCheck(String phoneNumber) {
+        return sqlSession.selectOne(NAMESPACE + ".phoneCheck", phoneNumber);
     }
 }

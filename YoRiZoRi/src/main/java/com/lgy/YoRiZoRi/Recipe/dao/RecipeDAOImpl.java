@@ -1,9 +1,13 @@
 package com.lgy.YoRiZoRi.Recipe.dao;
 
+import java.util.List; // [추가]
+import java.util.Map;  // [추가]
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.lgy.YoRiZoRi.Recipe.dto.CategoryDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.IngredientDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.RecipeDTO;
 import com.lgy.YoRiZoRi.Recipe.dto.StepDTO;
@@ -42,9 +46,26 @@ public class RecipeDAOImpl implements RecipeDAO {
         sqlSession.insert(NAMESPACE + ".insertRecipeIngredient", ingredientDTO);
     }
 
-    // [추가] 빠져있던 메소드를 구현합니다.
     @Override
     public IngredientDTO findIngredientByName(String name) {
         return sqlSession.selectOne(NAMESPACE + ".findIngredientByName", name);
+    }
+
+    /**
+     * [추가] 모든 카테고리 목록 조회 구현
+     * mapper의 "findAllCategories" 쿼리를 호출합니다.
+     */
+    @Override
+    public List<CategoryDTO> findAllCategories() {
+        return sqlSession.selectList(NAMESPACE + ".findAllCategories");
+    }
+
+    /**
+     * [추가] 레시피-카테고리 관계 정보 삽입 구현
+     * mapper의 "insertRecipeCategory" 쿼리를 호출합니다.
+     */
+    @Override
+    public void insertRecipeCategory(Map<String, Integer> params) {
+        sqlSession.insert(NAMESPACE + ".insertRecipeCategory", params);
     }
 }
